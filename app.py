@@ -4,14 +4,12 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# Reemplazá esto con tu ID de grupo o número si lo tenés a mano
-# Si no, después lo configuramos como "Variable de Entorno"
-API_KEY = "256412"
-SIGNAL_ID = "AQUÍ_VA_TU_ID_DE_GRUPO" 
+# Render nos va a guardar estos secretos bajo llave en su plataforma
+API_KEY = os.environ.get("CALLMEBOT_API_KEY", "256412")
+SIGNAL_ID = os.environ.get("SIGNAL_GROUP_ID") 
 
 @app.route('/webhook', methods=['GET', 'POST'])
 def webhook():
-    # Escuchamos lo que viene de Signal
     mensaje_recibido = ""
     if request.method == 'POST':
         datos = request.get_json() or {}
@@ -20,16 +18,19 @@ def webhook():
         mensaje_recibido = request.args.get('text', '')
 
     if mensaje_recibido:
-        print(f"Recibido: {mensaje_recibido}")
+        print(f"Recibido desde Signal: {mensaje_recibido}")
         
-        # Respondemos al grupo
+        # URL de CallMeBot para enviar mensajes a grupos
         url = "https://api.callmebot.com/signal/send.php"
         payload = {
             "group": SIGNAL_ID, 
             "apikey": API_KEY,
-            "text": f"¡Bot activo! Recibí tu mensaje: {mensaje_recibido}"
+            "text": f"¡Bot activo en el grupo! Recibí tu mensaje: {mensaje_recibido}"
         }
-        requests.get(url, params=payload)
+        try:
+            requests.get(url, params=payload)
+        except Exception as e:
+            print(f"Error al enviar a Signal: {e}")
 
     return "OK", 200
 
