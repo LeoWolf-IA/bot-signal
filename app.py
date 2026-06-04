@@ -18,7 +18,7 @@ def webhook():
         mensaje_recibido = request.args.get('text', '')
 
     if mensaje_recibido:
-        print(f"Recibido desde Signal: {mensaje_recibido}")
+        print(f"DATOS COMPLETOS: {request.args}")
         
         # URL de CallMeBot para enviar mensajes a grupos
         url = "https://signal.callmebot.com/signal/send.php"
