@@ -21,7 +21,7 @@ def webhook():
         print(f"Recibido desde Signal: {mensaje_recibido}")
         
         # URL de CallMeBot para enviar mensajes a grupos
-        url = "https://api.callmebot.com/signal/send.php"
+        url = "https://signal.callmebot.com/signal/send.php"
         payload = {
             "group": SIGNAL_ID, 
             "apikey": API_KEY,
