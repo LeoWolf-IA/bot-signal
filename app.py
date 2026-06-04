@@ -1,13 +1,17 @@
 from flask import Flask, request
-import requests
+import json
 
 app = Flask(__name__)
 
-@app.route('/webhook', methods=['GET'])
+@app.route('/webhook', methods=['GET', 'POST'])
 def webhook():
-    # Esto captura TODO lo que llegue, sin filtros
-    args = request.args.to_dict()
-    print(f"DEBUG: Datos completos recibidos -> {args}")
+    # Buscamos datos en todos los formatos posibles
+    data_get = request.args.to_dict()
+    data_post = request.form.to_dict()
+    
+    print(f"DEBUG - Datos GET: {data_get}")
+    print(f"DEBUG - Datos POST: {data_post}")
+    
     return "OK", 200
 
 if __name__ == "__main__":
